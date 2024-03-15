@@ -18,7 +18,7 @@ app.post("/send-email", async (req, res) => {
   try {
     const response = await client.sendEmail({
       From: "development@neodigital.co.id",
-      To: "muchlas@neodigital.co.id",
+      To: "ayesa@neodigital.co.id",
       Subject: subject,
       TextBody: text,
     });
