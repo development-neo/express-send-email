@@ -15,18 +15,37 @@ const client = new ServerClient(PUBLIC_POSTMARK_TOKEN);
 app.post("/send-email", async (req, res) => {
   const { subject, text } = req.body;
 
+  const to = [
+    "ayesa@neodigital.co.id",
+    "erlin@neodigital.co.id",
+    "icha@neodigital.co.id"
+  ];
+
   try {
-    const response = await client.sendEmail({
-      From: "development@neodigital.co.id",
-      To: "ayesa@neodigital.co.id",
-      Subject: subject,
-      TextBody: text,
+    // const response = await client.sendEmail({
+    //   From: "development@neodigital.co.id",
+    //   To: "ayesa@neodigital.co.id",
+    //   Subject: subject,
+    //   TextBody: text,
+    // });
+    // console.log("Email sent successfully:", response);
+    // res.status(200).json({ message: "Email sent successfully" });
+    const sendPromises = to.map((email) => {
+      return client.sendEmail({
+        From: "development@neodigital.co.id",
+        To: email,
+        Subject: subject,
+        TextBody: text,
+      });
     });
-    console.log("Email sent successfully:", response);
-    res.status(200).json({ message: "Email sent successfully" });
+
+    const response = await Promise.all(sendPromises);
+
+    console.log("Emails sent successfully", response);
+    res.status(200).json({ message: "Emails sent successfully" });
   } catch (error) {
-    console.error("Failed to send email:", error);
-    res.status(500).json({ error: "Failed to send email" });
+    console.error("Failed to send emails:", error);
+    res.status(500).json({ error: "Failed to send emails" });
   }
 });
 
